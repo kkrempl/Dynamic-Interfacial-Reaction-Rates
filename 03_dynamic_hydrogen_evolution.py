@@ -55,6 +55,10 @@ fit = linregress(signal, np.absolute(current))
 calib2_H2 = fit[0]
 data2.calibration = {"M2": calib2_H2}
 
+# RHE calibration of RE and surface area normalization of current
+data1.calibrate(RE_vs_RHE=0.05, A_el=0.196)
+data2.calibrate(RE_vs_RHE=0.05, A_el=0.196)
+
 # Define model parameters and deconvolute signal of Measurement1
 params = {
     "diff_const": 5.05e-9,
@@ -73,10 +77,8 @@ t_partcurr, v_partcurr = data1.get_partial_current(
 v_partcurr = -v_partcurr / 0.196  # Normalize to 0.196 electrode surface area
 t_curr, v_curr = data1.get_current(tspan=tspan)
 t_curr = t_curr - t_partcurr[0]
-v_curr = v_curr / 0.196
 t_pot, v_pot = data1.get_potential(tspan=tspan)
 t_pot = t_pot - t_partcurr[0]
-v_pot = v_pot + 0.05  # RHE calibration
 t_sig, v_sig = data1.get_calib_signal("M2", tspan=tspan, t_bg=t_bg)
 t_sig = t_sig - t_partcurr[0]
 v_sig = -v_sig / 0.196
@@ -153,11 +155,10 @@ t_partcurr, v_partcurr = data2.get_partial_current(
 )
 v_partcurr = -v_partcurr / 0.196  # Normalize to 0.196 electrode surface area
 t_curr, v_curr = data2.get_current(tspan=tspan)
-v_curr = v_curr / 0.196
 t_curr = t_curr - t_partcurr[0]
 t_pot, v_pot = data2.get_potential(tspan=tspan)
 t_pot = t_pot - t_partcurr[0]
-v_pot = (v_pot + 0.05) * 1e3  # RHE calibration & unit conversion to mV
+v_pot = v_pot * 1e3  # unit conversion to mV
 t_sig, v_sig = data2.get_calib_signal("M2", tspan=tspan, t_bg=t_bg)
 t_sig = t_sig - t_partcurr[0]
 v_sig = -v_sig / 0.196

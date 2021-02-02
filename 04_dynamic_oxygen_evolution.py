@@ -35,6 +35,9 @@ fit = linregress(signal, np.absolute(current))
 calib_O2 = fit[0]  # Calibration constant in mA/A (partial current/signal current)
 data.calibration = {"M32": calib_O2}
 
+# RHE calibration of RE and surface area normalization of current
+data.calibrate(RE_vs_RHE=0.05, A_el=0.196)
+
 # Define model parameters and deconvolute the oxygen signal
 params = {
     "diff_const": 2.1e-9,
@@ -47,16 +50,15 @@ model_kernel = Kernel(parameters=params)
 tspan = [10600, 10800]
 t_bg = [10800, 10900]
 
+
 t_partcurr, v_partcurr = data.get_partial_current(
     "M32", model_kernel, tspan=tspan, t_bg=t_bg, snr=10
 )
 v_partcurr = v_partcurr / 0.196  # Normalize to 0.196 electrode surface area
 t_curr, v_curr = data.get_current(tspan=tspan)
 t_curr = t_curr - t_partcurr[0]
-v_curr = v_curr / 0.196
 t_pot, v_pot = data.get_potential(tspan=tspan)
 t_pot = t_pot - t_partcurr[0]
-v_pot = v_pot + 0.05  # RHE calibration
 t_sig, v_sig = data.get_calib_signal("M32", tspan=tspan, t_bg=t_bg)
 t_sig = t_sig - t_partcurr[0]
 v_sig = v_sig / 0.196
