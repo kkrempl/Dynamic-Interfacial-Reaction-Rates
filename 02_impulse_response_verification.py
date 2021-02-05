@@ -13,7 +13,10 @@ from scipy.stats import linregress
 
 from ixdat.techniques.deconvolution import Kernel, DecoMeasurement
 
-data = DecoMeasurement.read("RawData/Measurement1.pkl", reader="EC_MS")
+data = DecoMeasurement.read(
+    "RawData/Measurement1.pkl", reader="EC_MS", 
+    # technique="DecoEMCS"  # make this work! so next line isn't needed.
+    )
 data.__class__ = DecoMeasurement
 
 # Calibration of O2 (M32)
@@ -155,12 +158,12 @@ model_kernel.plot(
 axH2.set_xlabel("time / [s]")
 axH2.set_xlim(0, 16)
 axH2.set_ylim(-0.05, 0.3)
-axH2.text(
-    -0.1, 1.05, r"\textbf{a)}", transform=axH2.transAxes, size=10, fontweight="bold"
-)
+# axH2.text(
+#     -0.1, 1.05, r"\textbf{a)}", transform=axH2.transAxes, size=10, fontweight="bold"
+# )
 axH2.set_yticks([])
 axH2.set_ylabel(
-    r"norm. impulse response $\mathsf{\frac{h(t)}{\int h(t)}}$ / [s\textsuperscript{-1}]"
+    r"norm. impulse response $\mathsf{\frac{h(t)}{\int h(t)}}$ / [s$^{-1}$]"
 )
 leg = axH2.legend(
     frameon=True,
@@ -170,4 +173,5 @@ leg = axH2.legend(
     shadow=False,
 )
 plt.tight_layout()
+fig1.savefig("Plots/comparisonH2BG_norm.png")
 fig1.savefig("Plots/comparisonH2BG_norm.eps", dpi=1000, format="eps")

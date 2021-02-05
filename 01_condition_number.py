@@ -5,12 +5,14 @@ Created on Fri June 12
 
 @author: Kevin Krempl
 """
-
+from pathlib import Path
 from ixdat.techniques.deconvolution import Kernel
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 import colorcet as cc
+
+plt.close("all")
 
 # Create figure
 params = {"text.latex.preamble": [r"\usepackage{siunitx}", "\sisetup{detect-all}"]}
@@ -48,7 +50,8 @@ def get_cond_number(sampling_freq, working_dist):
 
 
 # Calculate condition number for the heatmap or load precalculated from pickle.
-Z = pickle.load(open("RawData/condition_numbers.pkl", "rb"))
+with open(Path(__file__).parent/"RawData/condition_numbers.pkl", "rb") as f:    
+    Z = pickle.load(f)
 # Z = get_cond_number(X, Y)
 # Z [ Z > 100] = 100
 
@@ -60,7 +63,7 @@ cbar = fig.colorbar(cp, ticks=[1, 20, 40, 60, 80, 100])
 cbar.ax.set_yticklabels([r"$1$", r"$20$", r"$40$", r"$60$", r"$80$", r"$>100$"])
 plt.xscale("log")
 ax.set_title("Condition number")
-ax.set_ylabel(r"Working distance $L$ / [$\mathsf{\SI{}{\micro\meter}}$]")
-ax.set_xlabel(r"Sampling frequency $f$ / [$\mathsf{Hz}$]")
+ax.set_ylabel(r"Working distance $L$ / [$\mu$m]")
+ax.set_xlabel(r"Sampling frequency $f$ / [$Hz$]")
 plt.tight_layout()
-plt.savefig("Plots/heatmap.eps", dpi=1000, format="eps")
+plt.savefig("Plots/heatmap.png", dpi=1000, format="png")
