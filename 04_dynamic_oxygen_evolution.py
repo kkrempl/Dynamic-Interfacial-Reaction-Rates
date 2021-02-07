@@ -16,7 +16,6 @@ from ixdat.techniques.deconvolution import Kernel, DecoMeasurement
 
 # Import measurement data
 data = DecoMeasurement.read("RawData/Measurement3.pkl", reader="EC_MS")
-data.__class__ = DecoMeasurement
 
 # Calibration of O2 (M32)
 tspansO2 = [[8100, 8130], [8200, 8230], [8500, 8550]]

@@ -56,14 +56,17 @@ with open(Path(__file__).parent/"RawData/condition_numbers.pkl", "rb") as f:
 # Z [ Z > 100] = 100
 
 # Create and format heatmap plot
-cp = plt.contourf(X, Y, Z, 100, cmap=cc.cm.rainbow)
-for c in cp.collections:
-    c.set_edgecolor("face")
-cbar = fig.colorbar(cp, ticks=[1, 20, 40, 60, 80, 100])
+Z[Z>100] = 100 # can't get `vmax=100` colorbar to work right otherwise.
+cp = plt.contourf(X, Y, Z, 100, cmap=cc.cm.rainbow)  
+# for c in cp.collections:
+#     c.set_edgecolor("face")
+cbar = plt.colorbar(cp, ticks=[1, 20, 40, 60, 80, 100])
+cbar.ax.set_ylim([0, 100])
 cbar.ax.set_yticklabels([r"$1$", r"$20$", r"$40$", r"$60$", r"$80$", r"$>100$"])
 plt.xscale("log")
 ax.set_title("Condition number")
 ax.set_ylabel(r"Working distance $L$ / [$\mu$m]")
 ax.set_xlabel(r"Sampling frequency $f$ / [$Hz$]")
 plt.tight_layout()
-plt.savefig("Plots/heatmap.png", dpi=1000, format="png")
+plt.savefig("Plots/heatmap.png")
+# plt.savefig("Plots/heatmap.png", dpi=1000, format="png")

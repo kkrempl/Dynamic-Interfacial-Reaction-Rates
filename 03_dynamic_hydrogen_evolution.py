@@ -16,10 +16,8 @@ from ixdat.techniques.deconvolution import Kernel, DecoMeasurement
 
 # Import measurement data
 data1 = DecoMeasurement.read("RawData/Measurement1.pkl", reader="EC_MS")
-data1.__class__ = DecoMeasurement
 
 data2 = DecoMeasurement.read("RawData/Measurement2.pkl", reader="EC_MS")
-data2.__class__ = DecoMeasurement
 
 # Calibration of H2 (M2) of Measurement1
 tspansH2 = [[21300, 21310], [21360, 21369], [21400, 21410]]

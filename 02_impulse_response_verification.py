@@ -13,11 +13,7 @@ from scipy.stats import linregress
 
 from ixdat.techniques.deconvolution import Kernel, DecoMeasurement
 
-data = DecoMeasurement.read(
-    "RawData/Measurement1.pkl", reader="EC_MS", 
-    # technique="DecoEMCS"  # make this work! so next line isn't needed.
-    )
-data.__class__ = DecoMeasurement
+data = DecoMeasurement.read("RawData/Measurement1.pkl", reader="EC_MS")
 
 # Calibration of O2 (M32)
 tspansO2 = [[8280, 8300], [8385, 8390], [8470, 8480]]
@@ -96,7 +92,8 @@ model_kernel.plot(
 )
 
 # Format figure
-axO2.set_ylabel(r"$\mathsf{\frac{h(t)}{\int h(t)}}$ / [s\textsuperscript{-1}]")
+axO2.set_ylabel(r"$\mathsf{\frac{h(t)}{\int h(t)}}$ / [s$^{-1}$]")
+axO2.set_title("norm. impulse response (O$_2$)")
 axO2.set_xlabel("time / [s]")
 axO2.set_xlim(0, 30)
 axO2.set_ylim(-0.025, 0.15)
@@ -109,9 +106,10 @@ leg = axO2.legend(
     shadow=False,
 )
 
-axO2.text(
-    -0.1, 1.05, r"\textbf{b)}", transform=axO2.transAxes, size=10, fontweight="bold"
-)
+# axO2.text(
+#     -0.1, 1.05, r"\textbf{b)}", 
+#     transform=axO2.transAxes, size=10, fontweight="bold"
+# )
 
 # Extract and plot H2 impulses from measurement
 tspansH2impulses = [
@@ -163,7 +161,7 @@ axH2.set_ylim(-0.05, 0.3)
 # )
 axH2.set_yticks([])
 axH2.set_ylabel(
-    r"norm. impulse response $\mathsf{\frac{h(t)}{\int h(t)}}$ / [s$^{-1}$]"
+    r"$\mathsf{\frac{h(t)}{\int h(t)}}$ / [s$^{-1}$]"
 )
 leg = axH2.legend(
     frameon=True,
@@ -172,6 +170,7 @@ leg = axH2.legend(
     edgecolor="black",
     shadow=False,
 )
+axH2.set_title("norm. impulse response (H$_2$)")
 plt.tight_layout()
 fig1.savefig("Plots/comparisonH2BG_norm.png")
-fig1.savefig("Plots/comparisonH2BG_norm.eps", dpi=1000, format="eps")
+# fig1.savefig("Plots/comparisonH2BG_norm.eps", dpi=1000, format="eps")
