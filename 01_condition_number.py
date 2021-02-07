@@ -15,8 +15,8 @@ import colorcet as cc
 plt.close("all")
 
 # Create figure
-params = {"text.latex.preamble": [r"\usepackage{siunitx}", "\sisetup{detect-all}"]}
-plt.rcParams.update(params)
+# params = {"text.latex.preamble": [r"\usepackage{siunitx}", "\sisetup{detect-all}"]}
+# plt.rcParams.update(params)
 fig = plt.figure(figsize=(7.5 / 2, 3.5))
 ax = fig.add_subplot(111)
 

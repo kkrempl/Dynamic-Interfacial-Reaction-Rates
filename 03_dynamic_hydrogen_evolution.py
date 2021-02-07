@@ -87,7 +87,7 @@ fig = plt.figure(figsize=(8, 3.5))
 
 ax12 = fig.add_subplot(222)
 ax12.set_xticklabels([])
-ax12.set_ylabel(r"$J_{H_2}$ / [$\mathsf{\frac{mA}{cm^2}}$]")
+ax12.set_ylabel(r"$J_{H_2}$ / [mA cm$^{-2}$]")
 ax12.set_ylim(-0.8, 0.04)
 ax12.set_xlim(0, 35)
 ax12.plot(t_sig, v_sig, color=(0.5, 0.9, 1, 1), label="calibrated")
@@ -109,9 +109,9 @@ ax12.annotate(
     xy=(t_sig[130], v_sig[130]),
     arrowprops=dict(arrowstyle="->", lw=0.5),
 )
-ax12.annotate(
-    r"\textbf{b)}", xy=(0.505, 0.95), xytext=(0.505, 0.95), xycoords="figure fraction"
-)
+# ax12.annotate(
+#     r"\textbf{b)}", xy=(0.505, 0.95), xytext=(0.505, 0.95), xycoords="figure fraction"
+# )
 
 
 ax32 = fig.add_subplot(224)
@@ -227,17 +227,18 @@ axins.plot(
 )
 axins.set_xlim([-1, 14])
 axins.annotate(
-    r"1\textsuperscript{st}",
+    r"1st",
     xytext=(8, -0.01),
     xy=(4, -0.01),
     arrowprops=dict(arrowstyle="->", lw=0.5),
 )
 axins.annotate(
-    r"2\textsuperscript{nd}",
+    r"2nd",
     xytext=(9, -0.03),
     xy=(3.2, -0.04),
     arrowprops=dict(arrowstyle="->", lw=0.5),
 )
 
 plt.tight_layout()
-fig.savefig("Plots/HER_transients_all.eps", dpi=1000, format="eps")
+# fig.savefig("Plots/HER_transients_all.eps", dpi=1000, format="eps")
+fig.savefig("Plots/HER_transients_all.png")
