@@ -22,9 +22,9 @@ signal = []
 current = []
 
 for tspan in tspansO2:
-    _, sig_values = data.get_signal("M32", tspan=tspan, t_bg=t_bg)
+    _, sig_values = data.grab_signal("M32", tspan=tspan, t_bg=t_bg)
     signal.append(np.mean(sig_values))
-    _, curr_values = data.get_current(tspan=tspan)
+    _, curr_values = data.grab_current(tspan=tspan)
     current.append(np.mean(curr_values))
 
 fit = linregress(signal, np.absolute(current))
@@ -39,9 +39,9 @@ current = []
 
 for tspan in tspansH2:
     print(tspan)
-    _, sig_values = data.get_signal("M2", tspan=tspan, t_bg=t_bg)
+    _, sig_values = data.grab_signal("M2", tspan=tspan, t_bg=t_bg)
     signal.append(np.mean(sig_values))
-    _, curr_values = data.get_current(tspan=tspan)
+    _, curr_values = data.grab_current(tspan=tspan)
     current.append(np.mean(curr_values))
 
 fit = linregress(signal, np.absolute(current))

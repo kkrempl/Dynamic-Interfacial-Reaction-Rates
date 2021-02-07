@@ -24,9 +24,9 @@ signal = []
 current = []
 
 for tspan in tspansO2:
-    _, sig_values = data.get_signal("M32", tspan=tspan, t_bg=t_bg)
+    _, sig_values = data.grab_signal("M32", tspan=tspan, t_bg=t_bg)
     signal.append(np.mean(sig_values))
-    _, curr_values = data.get_current(tspan=tspan)
+    _, curr_values = data.grab_current(tspan=tspan)
     current.append(np.mean(curr_values))
 
 fit = linregress(signal, np.absolute(current))
@@ -50,15 +50,15 @@ tspan = [10600, 10800]
 t_bg = [10800, 10900]
 
 
-t_partcurr, v_partcurr = data.get_partial_current(
+t_partcurr, v_partcurr = data.grab_partial_current(
     "M32", model_kernel, tspan=tspan, t_bg=t_bg, snr=10
 )
 v_partcurr = v_partcurr / 0.196  # Normalize to 0.196 electrode surface area
-t_curr, v_curr = data.get_current(tspan=tspan)
+t_curr, v_curr = data.grab_current(tspan=tspan)
 t_curr = t_curr - t_partcurr[0]
-t_pot, v_pot = data.get_potential(tspan=tspan)
+t_pot, v_pot = data.grab_potential(tspan=tspan)
 t_pot = t_pot - t_partcurr[0]
-t_sig, v_sig = data.get_calib_signal("M32", tspan=tspan, t_bg=t_bg)
+t_sig, v_sig = data.grab_cal_signal("M32", tspan=tspan, t_bg=t_bg)
 t_sig = t_sig - t_partcurr[0]
 v_sig = v_sig / 0.196
 t_partcurr = t_partcurr - t_partcurr[0]
@@ -171,4 +171,5 @@ plt.tight_layout()
 ax1.annotate(
     r"\textbf{b)}", xy=(0.62, 0.95), xytext=(0.62, 0.95), xycoords="figure fraction"
 )
-fig.savefig("Plots/OER_transients.eps", dpi=1000, format="eps")
+# fig.savefig("Plots/OER_transients.eps", dpi=1000, format="eps")
+fig.savefig("Plots/OER_transients.png")
