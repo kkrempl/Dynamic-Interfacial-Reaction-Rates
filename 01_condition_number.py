@@ -50,14 +50,14 @@ def get_cond_number(sampling_freq, working_dist):
 
 
 # Calculate condition number for the heatmap or load precalculated from pickle.
-with open(Path(__file__).parent/"RawData/condition_numbers.pkl", "rb") as f:    
+with open(Path(__file__).parent / "RawData/condition_numbers.pkl", "rb") as f:
     Z = pickle.load(f)
 # Z = get_cond_number(X, Y)
-# Z [ Z > 100] = 100
+Z[Z > 100] = 100
 
 # Create and format heatmap plot
-Z[Z>100] = 100 # can't get `vmax=100` colorbar to work right otherwise.
-cp = plt.contourf(X, Y, Z, 100, cmap=cc.cm.rainbow)  
+Z[Z > 100] = 100  # can't get `vmax=100` colorbar to work right otherwise.
+cp = plt.contourf(X, Y, Z, 100, cmap=cc.cm.rainbow)
 # for c in cp.collections:
 #     c.set_edgecolor("face")
 cbar = plt.colorbar(cp, ticks=[1, 20, 40, 60, 80, 100])
