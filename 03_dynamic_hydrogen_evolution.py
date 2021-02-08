@@ -16,10 +16,8 @@ from ixdat.techniques.deconvolution import Kernel, DecoMeasurement
 
 # Import measurement data
 data1 = DecoMeasurement.read("RawData/Measurement1.pkl", reader="EC_MS")
-data1.__class__ = DecoMeasurement
 
 data2 = DecoMeasurement.read("RawData/Measurement2.pkl", reader="EC_MS")
-data2.__class__ = DecoMeasurement
 
 # Calibration of H2 (M2) of Measurement1
 tspansH2 = [[21300, 21310], [21360, 21369], [21400, 21410]]
@@ -28,9 +26,9 @@ signal = []
 current = []
 
 for tspan in tspansH2:
-    _, sig_values = data1.get_signal("M2", tspan=tspan, t_bg=t_bg)
+    _, sig_values = data1.grab_signal("M2", tspan=tspan, t_bg=t_bg)
     signal.append(np.mean(sig_values))
-    _, curr_values = data1.get_current(tspan=tspan)
+    _, curr_values = data1.grab_current(tspan=tspan)
     current.append(np.mean(curr_values))
 
 fit = linregress(signal, np.absolute(current))
@@ -45,9 +43,9 @@ signal = []
 current = []
 
 for tspan in tspansH2:
-    _, sig_values = data2.get_signal("M2", tspan=tspan, t_bg=t_bg)
+    _, sig_values = data2.grab_signal("M2", tspan=tspan, t_bg=t_bg)
     signal.append(np.mean(sig_values))
-    _, curr_values = data2.get_current(tspan=tspan)
+    _, curr_values = data2.grab_current(tspan=tspan)
     current.append(np.mean(curr_values))
 
 fit = linregress(signal, np.absolute(current))
@@ -71,15 +69,15 @@ model_kernel = Kernel(parameters=params)
 tspan = [20815, 21000]
 t_bg = [21500, 21510]
 
-t_partcurr, v_partcurr = data1.get_partial_current(
+t_partcurr, v_partcurr = data1.grab_partial_current(
     "M2", model_kernel, tspan=tspan, t_bg=t_bg, snr=50
 )
 v_partcurr = -v_partcurr / 0.196  # Normalize to 0.196 electrode surface area
-t_curr, v_curr = data1.get_current(tspan=tspan)
+t_curr, v_curr = data1.grab_current(tspan=tspan)
 t_curr = t_curr - t_partcurr[0]
-t_pot, v_pot = data1.get_potential(tspan=tspan)
+t_pot, v_pot = data1.grab_potential(tspan=tspan)
 t_pot = t_pot - t_partcurr[0]
-t_sig, v_sig = data1.get_calib_signal("M2", tspan=tspan, t_bg=t_bg)
+t_sig, v_sig = data1.grab_cal_signal("M2", tspan=tspan, t_bg=t_bg)
 t_sig = t_sig - t_partcurr[0]
 v_sig = -v_sig / 0.196
 t_partcurr = t_partcurr - t_partcurr[0]
@@ -89,7 +87,7 @@ fig = plt.figure(figsize=(8, 3.5))
 
 ax12 = fig.add_subplot(222)
 ax12.set_xticklabels([])
-ax12.set_ylabel(r"$J_{H_2}$ / [$\mathsf{\frac{mA}{cm^2}}$]")
+ax12.set_ylabel(r"$J_{H_2}$ / [mA cm$^{-2}$]")
 ax12.set_ylim(-0.8, 0.04)
 ax12.set_xlim(0, 35)
 ax12.plot(t_sig, v_sig, color=(0.5, 0.9, 1, 1), label="calibrated")
@@ -111,9 +109,9 @@ ax12.annotate(
     xy=(t_sig[130], v_sig[130]),
     arrowprops=dict(arrowstyle="->", lw=0.5),
 )
-ax12.annotate(
-    r"\textbf{b)}", xy=(0.505, 0.95), xytext=(0.505, 0.95), xycoords="figure fraction"
-)
+# ax12.annotate(
+#     r"\textbf{b)}", xy=(0.505, 0.95), xytext=(0.505, 0.95), xycoords="figure fraction"
+# )
 
 
 ax32 = fig.add_subplot(224)
@@ -150,16 +148,16 @@ model_kernel = Kernel(parameters=params)
 tspan = [12136, 12380]
 t_bg = [11735, 11760]
 
-t_partcurr, v_partcurr = data2.get_partial_current(
+t_partcurr, v_partcurr = data2.grab_partial_current(
     "M2", model_kernel, tspan=tspan, t_bg=t_bg, snr=3.3
 )
 v_partcurr = -v_partcurr / 0.196  # Normalize to 0.196 electrode surface area
-t_curr, v_curr = data2.get_current(tspan=tspan)
+t_curr, v_curr = data2.grab_current(tspan=tspan)
 t_curr = t_curr - t_partcurr[0]
-t_pot, v_pot = data2.get_potential(tspan=tspan)
+t_pot, v_pot = data2.grab_potential(tspan=tspan)
 t_pot = t_pot - t_partcurr[0]
 v_pot = v_pot * 1e3  # unit conversion to mV
-t_sig, v_sig = data2.get_calib_signal("M2", tspan=tspan, t_bg=t_bg)
+t_sig, v_sig = data2.grab_cal_signal("M2", tspan=tspan, t_bg=t_bg)
 t_sig = t_sig - t_partcurr[0]
 v_sig = -v_sig / 0.196
 t_partcurr = t_partcurr - t_partcurr[0]
@@ -229,17 +227,18 @@ axins.plot(
 )
 axins.set_xlim([-1, 14])
 axins.annotate(
-    r"1\textsuperscript{st}",
+    r"1st",
     xytext=(8, -0.01),
     xy=(4, -0.01),
     arrowprops=dict(arrowstyle="->", lw=0.5),
 )
 axins.annotate(
-    r"2\textsuperscript{nd}",
+    r"2nd",
     xytext=(9, -0.03),
     xy=(3.2, -0.04),
     arrowprops=dict(arrowstyle="->", lw=0.5),
 )
 
 plt.tight_layout()
-fig.savefig("Plots/HER_transients_all.eps", dpi=1000, format="eps")
+# fig.savefig("Plots/HER_transients_all.eps", dpi=1000, format="eps")
+fig.savefig("Plots/HER_transients_all.png")
